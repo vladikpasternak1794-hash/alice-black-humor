@@ -112,9 +112,14 @@ module.exports = async function handler(req, res) {
     const answer = await askGemini(userText);
     return sendJson(res, 200, aliceResponse(answer));
   } catch (error) {
-    console.error("Webhook error:", error?.message || error);
-    return sendJson(res, 200, aliceResponse(
-      "Бля, у меня сейчас мозги искрят. Попробуй ещё раз через пару секунд."
-    ));
-  }
-};
+    console.error(
+  "Gemini API error:",
+  response.status,
+  JSON.stringify(data)
+);
+
+throw new Error(
+  `Gemini HTTP ${response.status}: ${
+    data?.error?.message || "Unknown Gemini API error"
+  }`
+);
